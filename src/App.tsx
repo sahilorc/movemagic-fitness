@@ -8,6 +8,7 @@ import { AnimatePresence } from "framer-motion";
 import Index from "./pages/Index";
 import Workouts from "./pages/Workouts";
 import Profile from "./pages/Profile";
+import NutritionScanner from "./pages/NutritionScanner";
 import NotFound from "./pages/NotFound";
 import Navigation from "./components/Navigation";
 
@@ -25,6 +26,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/workouts" element={<Workouts />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/nutrition" element={<NutritionScanner />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </AnimatePresence>
