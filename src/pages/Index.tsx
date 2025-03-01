@@ -33,7 +33,7 @@ const Index = () => {
   return (
     <div className="pb-24">
       <Header 
-        title={`${greeting}, Sarah`}
+        title={`${greeting}, Sahil`}
         subtitle="Monday, June 12"
       />
 

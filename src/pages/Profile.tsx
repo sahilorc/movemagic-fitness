@@ -41,7 +41,7 @@ const Profile = () => {
         <div className="relative mb-4">
           <div className="h-24 w-24 overflow-hidden rounded-full border-4 border-background bg-secondary">
             <img
-              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=3387&auto=format&fit=crop"
+              src="https://images.unsplash.com/photo-1618641986557-1ecd230959aa?q=80&w=2787&auto=format&fit=crop"
               alt="Profile"
               className="h-full w-full object-cover"
             />
@@ -54,7 +54,7 @@ const Profile = () => {
             </svg>
           </div>
         </div>
-        <h2 className="text-2xl font-medium">Sarah Johnson</h2>
+        <h2 className="text-2xl font-medium">Sahil R T Shrestha</h2>
         <p className="text-muted-foreground">Fitness Enthusiast</p>
         
         <div className="mt-4 flex gap-3">
