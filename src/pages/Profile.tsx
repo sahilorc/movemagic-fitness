@@ -3,9 +3,6 @@ import { useState } from "react";
 import Header from "@/components/Header";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { useNavigate } from "react-router-dom";
-import { useOnboarding } from "@/contexts/OnboardingContext";
-import { Button } from "@/components/ui/button";
 
 const statsData = [
   { label: "Workouts", value: "32" },
@@ -22,8 +19,6 @@ const achievements = [
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("stats");
-  const navigate = useNavigate();
-  const { userProfile, setHasCompletedOnboarding } = useOnboarding();
 
   const container = {
     hidden: { opacity: 0 },
@@ -38,12 +33,6 @@ const Profile = () => {
   const item = {
     hidden: { opacity: 0, y: 10 },
     show: { opacity: 1, y: 0 }
-  };
-
-  const handleEditProfile = () => {
-    // Reset onboarding state to go through the flow again
-    setHasCompletedOnboarding(false);
-    navigate("/onboarding");
   };
 
   return (
@@ -65,22 +54,16 @@ const Profile = () => {
             </svg>
           </div>
         </div>
-        <h2 className="text-2xl font-medium">{userProfile.name || "Sarah Johnson"}</h2>
+        <h2 className="text-2xl font-medium">Sarah Johnson</h2>
         <p className="text-muted-foreground">Fitness Enthusiast</p>
         
         <div className="mt-4 flex gap-3">
-          <Button 
-            onClick={handleEditProfile}
-            className="rounded-full bg-primary px-6 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary/90 transition-colors"
-          >
+          <button className="rounded-full bg-primary px-6 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary/90 transition-colors">
             Edit Profile
-          </Button>
-          <Button 
-            variant="outline"
-            className="rounded-full border border-border bg-background px-6 py-2 text-sm font-medium shadow-sm hover:bg-muted/30 transition-colors"
-          >
+          </button>
+          <button className="rounded-full border border-border bg-background px-6 py-2 text-sm font-medium shadow-sm hover:bg-muted/30 transition-colors">
             Settings
-          </Button>
+          </button>
         </div>
       </div>
 

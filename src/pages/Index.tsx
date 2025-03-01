@@ -4,35 +4,16 @@ import Header from "@/components/Header";
 import StatsCard from "@/components/StatsCard";
 import WorkoutCard from "@/components/WorkoutCard";
 import { motion } from "framer-motion";
-import { useOnboarding } from "@/contexts/OnboardingContext";
-import { useNavigate } from "react-router-dom";
-import { Workout, generateWorkouts } from "@/services/WorkoutService";
 
 const Index = () => {
   const [greeting, setGreeting] = useState("Good morning");
-  const [recommendedWorkouts, setRecommendedWorkouts] = useState<Workout[]>([]);
-  const { userProfile, hasCompletedOnboarding } = useOnboarding();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    // Set greeting based on time of day
     const hours = new Date().getHours();
     if (hours < 12) setGreeting("Good morning");
     else if (hours < 18) setGreeting("Good afternoon");
     else setGreeting("Good evening");
-
-    // If user hasn't completed onboarding, redirect to onboarding
-    if (!hasCompletedOnboarding) {
-      navigate("/onboarding");
-      return;
-    }
-
-    // Generate workouts for recommendations
-    const generatedWorkouts = generateWorkouts(userProfile);
-    // Select 2 random workouts for recommendations
-    const shuffled = [...generatedWorkouts].sort(() => 0.5 - Math.random());
-    setRecommendedWorkouts(shuffled.slice(0, 2));
-  }, [userProfile, hasCompletedOnboarding, navigate]);
+  }, []);
 
   const container = {
     hidden: { opacity: 0 },
@@ -52,8 +33,8 @@ const Index = () => {
   return (
     <div className="pb-24">
       <Header 
-        title={`${greeting}, ${userProfile.name || "Sarah"}`}
-        subtitle={new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+        title={`${greeting}, Sarah`}
+        subtitle="Monday, June 12"
       />
 
       {/* Stats section */}
@@ -107,20 +88,17 @@ const Index = () => {
       <section className="mb-8">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-medium">Today's Plan</h2>
-          <button className="text-sm font-medium text-primary" onClick={() => navigate('/workouts')}>View all</button>
+          <button className="text-sm font-medium text-primary">View all</button>
         </div>
         
         <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Up Next • 10:00 AM</p>
-              <h3 className="text-lg font-medium">Morning Workout</h3>
+              <h3 className="text-lg font-medium">Morning Cardio</h3>
               <p className="text-sm text-muted-foreground">30 min • 150 cal</p>
             </div>
-            <button 
-              className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary/90 transition-colors"
-              onClick={() => navigate('/workouts')}
-            >
+            <button className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary/90 transition-colors">
               Start
             </button>
           </div>
@@ -136,42 +114,34 @@ const Index = () => {
       <section>
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-medium">Recommended For You</h2>
-          <button 
-            className="text-sm font-medium text-primary"
-            onClick={() => navigate('/workouts')}
-          >
-            View all
-          </button>
+          <button className="text-sm font-medium text-primary">View all</button>
         </div>
         
-        {recommendedWorkouts.length === 0 ? (
-          <div className="py-10 text-center text-muted-foreground">
-            <p>Customizing recommendations based on your profile...</p>
-          </div>
-        ) : (
-          <motion.div 
-            className="grid grid-cols-1 gap-4 sm:grid-cols-2"
-            variants={container}
-            initial="hidden"
-            animate="show"
-          >
-            {recommendedWorkouts.map((workout) => (
-              <motion.div key={workout.id} variants={item}>
-                <WorkoutCard
-                  title={workout.title}
-                  description={workout.description}
-                  duration={workout.duration}
-                  intensity={workout.intensity}
-                  imageUrl={workout.imageUrl}
-                  onClick={() => {
-                    // Handle workout selection
-                    console.log("Selected workout:", workout);
-                  }}
-                />
-              </motion.div>
-            ))}
+        <motion.div 
+          className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+          variants={container}
+          initial="hidden"
+          animate="show"
+        >
+          <motion.div variants={item}>
+            <WorkoutCard
+              title="HIIT Cardio Blast"
+              description="A high-intensity interval training workout to boost your cardio endurance and burn calories."
+              duration="25 min"
+              intensity="Hard"
+              imageUrl="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=3270&auto=format&fit=crop"
+            />
           </motion.div>
-        )}
+          <motion.div variants={item}>
+            <WorkoutCard
+              title="Full Body Strength"
+              description="Build strength and muscle with this comprehensive full body routine."
+              duration="45 min"
+              intensity="Medium"
+              imageUrl="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=3270&auto=format&fit=crop"
+            />
+          </motion.div>
+        </motion.div>
       </section>
     </div>
   );

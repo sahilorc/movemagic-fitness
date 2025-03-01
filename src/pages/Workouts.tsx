@@ -1,33 +1,71 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Header from "@/components/Header";
 import WorkoutCard from "@/components/WorkoutCard";
 import { motion } from "framer-motion";
-import { Workout, generateWorkouts } from "@/services/WorkoutService";
-import { useOnboarding } from "@/contexts/OnboardingContext";
-import { useNavigate } from "react-router-dom";
 
-const categories = ["All", "Strength", "Cardio", "Yoga", "HIIT", "Flexibility"];
+const categories = ["All", "Strength", "Cardio", "Yoga", "Flexibility"];
+
+const workouts = [
+  {
+    id: 1,
+    title: "HIIT Cardio Blast",
+    description: "A high-intensity interval training workout to boost your cardio endurance and burn calories.",
+    duration: "25 min",
+    intensity: "Hard" as const,
+    category: "Cardio",
+    imageUrl: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=3270&auto=format&fit=crop"
+  },
+  {
+    id: 2,
+    title: "Full Body Strength",
+    description: "Build strength and muscle with this comprehensive full body routine.",
+    duration: "45 min",
+    intensity: "Medium" as const,
+    category: "Strength",
+    imageUrl: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=3270&auto=format&fit=crop"
+  },
+  {
+    id: 3,
+    title: "Yoga Flow",
+    description: "Improve flexibility, balance, and mindfulness with this calming yoga session.",
+    duration: "30 min",
+    intensity: "Easy" as const,
+    category: "Yoga",
+    imageUrl: "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?q=80&w=3270&auto=format&fit=crop"
+  },
+  {
+    id: 4,
+    title: "Core Crusher",
+    description: "Strengthen your core and improve posture with this targeted ab workout.",
+    duration: "20 min",
+    intensity: "Medium" as const,
+    category: "Strength",
+    imageUrl: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=3270&auto=format&fit=crop"
+  },
+  {
+    id: 5,
+    title: "Flexibility Focus",
+    description: "Improve range of motion and prevent injuries with this stretching routine.",
+    duration: "25 min",
+    intensity: "Easy" as const,
+    category: "Flexibility",
+    imageUrl: "https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=3270&auto=format&fit=crop"
+  },
+  {
+    id: 6,
+    title: "Tabata Training",
+    description: "Maximize calorie burn in minimal time with this efficient Tabata workout.",
+    duration: "20 min",
+    intensity: "Hard" as const,
+    category: "Cardio",
+    imageUrl: "https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=3269&auto=format&fit=crop"
+  }
+];
 
 const Workouts = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [workouts, setWorkouts] = useState<Workout[]>([]);
-  const { userProfile, hasCompletedOnboarding } = useOnboarding();
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    // If user hasn't completed onboarding, redirect to onboarding
-    if (!hasCompletedOnboarding) {
-      navigate("/onboarding");
-      return;
-    }
-
-    // Generate workouts based on user profile
-    const generatedWorkouts = generateWorkouts(userProfile);
-    setWorkouts(generatedWorkouts);
-  }, [userProfile, hasCompletedOnboarding, navigate]);
-
-  // Filter workouts by selected category
   const filteredWorkouts = selectedCategory === "All" 
     ? workouts 
     : workouts.filter(workout => workout.category === selectedCategory);
@@ -71,35 +109,25 @@ const Workouts = () => {
         ))}
       </div>
 
-      {workouts.length === 0 ? (
-        <div className="py-20 text-center text-muted-foreground">
-          <p>Customizing workouts based on your profile...</p>
-        </div>
-      ) : (
-        /* Workouts grid */
-        <motion.div 
-          className="grid grid-cols-1 gap-6 sm:grid-cols-2"
-          variants={container}
-          initial="hidden"
-          animate="show"
-        >
-          {filteredWorkouts.map(workout => (
-            <motion.div key={workout.id} variants={item}>
-              <WorkoutCard
-                title={workout.title}
-                description={workout.description}
-                duration={workout.duration}
-                intensity={workout.intensity}
-                imageUrl={workout.imageUrl}
-                onClick={() => {
-                  // Handle workout selection
-                  console.log("Selected workout:", workout);
-                }}
-              />
-            </motion.div>
-          ))}
-        </motion.div>
-      )}
+      {/* Workouts grid */}
+      <motion.div 
+        className="grid grid-cols-1 gap-6 sm:grid-cols-2"
+        variants={container}
+        initial="hidden"
+        animate="show"
+      >
+        {filteredWorkouts.map(workout => (
+          <motion.div key={workout.id} variants={item}>
+            <WorkoutCard
+              title={workout.title}
+              description={workout.description}
+              duration={workout.duration}
+              intensity={workout.intensity}
+              imageUrl={workout.imageUrl}
+            />
+          </motion.div>
+        ))}
+      </motion.div>
     </div>
   );
 };
