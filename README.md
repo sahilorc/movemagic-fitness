@@ -25,7 +25,7 @@ MoveMagic is an elegant, minimalist fitness tracking application designed with a
 
 ## How to Use
 
-Visit the [MoveMagic Project](https://lovable.dev/projects/a135d8e0-b987-449a-bcb8-37369e911694) to see the application in action.
+Visit the (https://preview--movemagic-fitness.lovable.app/) to see the application in action.
 
 ## Development
 
