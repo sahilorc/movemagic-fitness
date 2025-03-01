@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, Dumbbell, User } from "lucide-react";
+import { Home, Dumbbell, User, Scan } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Navigation = () => {
@@ -14,6 +14,7 @@ const Navigation = () => {
 
   const navItems = [
     { label: "Home", icon: Home, route: "/" },
+    { label: "Nutrition", icon: Scan, route: "/nutrition" },
     { label: "Workouts", icon: Dumbbell, route: "/workouts" },
     { label: "Profile", icon: User, route: "/profile" }
   ];
