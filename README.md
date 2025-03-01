@@ -10,9 +10,6 @@ MoveMagic is an elegant, minimalist fitness tracking application designed with a
 - **Profile:** Track your fitness journey with stats and achievements
 - **Modern UI:** Smooth animations, neo-morphism, and a clean interface
 
-## Project Info
-
-**URL**: https://lovable.dev/projects/a135d8e0-b987-449a-bcb8-37369e911694
 
 ## Technology Stack
 
