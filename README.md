@@ -1,69 +1,64 @@
-# Welcome to your Lovable project
 
-## Project info
+# MoveMagic Fitness
+
+MoveMagic is an elegant, minimalist fitness tracking application designed with a focus on user experience and clean aesthetics.
+
+## Features
+
+- **Dashboard:** View your daily fitness stats with beautiful animated cards
+- **Workouts:** Browse workout routines filtered by category
+- **Profile:** Track your fitness journey with stats and achievements
+- **Modern UI:** Smooth animations, neo-morphism, and a clean interface
+
+## Project Info
 
 **URL**: https://lovable.dev/projects/a135d8e0-b987-449a-bcb8-37369e911694
 
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/a135d8e0-b987-449a-bcb8-37369e911694) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with .
+## Technology Stack
 
 - Vite
 - TypeScript
 - React
 - shadcn-ui
 - Tailwind CSS
+- Framer Motion for animations
 
-## How can I deploy this project?
+## How to Use
 
-Simply open [Lovable](https://lovable.dev/projects/a135d8e0-b987-449a-bcb8-37369e911694) and click on Share -> Publish.
+Visit the [MoveMagic Project](https://lovable.dev/projects/a135d8e0-b987-449a-bcb8-37369e911694) to see the application in action.
 
-## I want to use a custom domain - is that possible?
+## Development
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+To work on this project locally:
+
+```sh
+# Clone the repository
+git clone <YOUR_GIT_URL>
+
+# Navigate to the project directory
+cd movemagic-fitness
+
+# Install dependencies
+npm i
+
+# Start the development server
+npm run dev
+```
+
+## Future Enhancements
+
+- User authentication with Firebase
+- Integration with fitness tracking APIs
+- AI-powered workout recommendations
+- Nutrition tracking features
+
+## Design Philosophy
+
+MoveMagic is built with a focus on:
+
+- Simplicity and clarity
+- High-quality aesthetic
+- Function over form
+- Precision in details
+
+Inspired by the design principles of minimalism and user-centered design.
