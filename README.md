@@ -1,3 +1,6 @@
+#AI in Action:
+It is undeniably amazing how AI is changing and shaping every aspect of our life in 2025, i know basic coding and i am not at this advanced level but with help of OpenAI and tools i was able to build this app within 30minutes. otherwise it would at least take few months and highly skilled team to plan, design, code and deploy this. i agree it is not perfect but i believe this is surely easier to do than start form scratch.
+
 
 # MoveMagic Fitness
 
