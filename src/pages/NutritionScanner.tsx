@@ -1,7 +1,7 @@
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Dumbbell, Camera, X, Check, Plus, Image } from "lucide-react";
+import { Dumbbell, Camera, X, Check, Image } from "lucide-react";
 import { toast } from "sonner";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
@@ -21,27 +21,71 @@ interface NutritionResult {
 
 const NutritionScanner = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [nutritionResult, setNutritionResult] = useState<NutritionResult | null>(null);
+  const [cameraActive, setCameraActive] = useState(false);
+  const [activeTab, setActiveTab] = useState("camera");
   
-  const handleCapture = async () => {
+  // Handle camera stream cleanup when component unmounts
+  useEffect(() => {
+    return () => {
+      if (videoRef.current && videoRef.current.srcObject) {
+        const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
+        tracks.forEach(track => track.stop());
+      }
+    };
+  }, []);
+
+  const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      // Implement video capture logic here
-      toast.success("Camera accessed successfully");
-      // For demonstration, we'll simulate an image selection
-      simulateImageSelection();
+      if (videoRef.current) {
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+          video: { 
+            facingMode: 'environment',
+            width: { ideal: 1280 },
+            height: { ideal: 720 } 
+          } 
+        });
+        
+        videoRef.current.srcObject = stream;
+        setCameraActive(true);
+        toast.success("Camera activated successfully");
+      }
     } catch (error) {
       console.error("Error accessing camera:", error);
       toast.error("Could not access camera. Try uploading an image instead.");
     }
   };
 
-  // For demo purposes, simulate selecting an image
-  const simulateImageSelection = () => {
-    setSelectedImage("/placeholder.svg");
-    toast.info("Image selected for analysis");
+  const stopCamera = () => {
+    if (videoRef.current && videoRef.current.srcObject) {
+      const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
+      tracks.forEach(track => track.stop());
+      videoRef.current.srcObject = null;
+      setCameraActive(false);
+    }
+  };
+
+  const captureImage = () => {
+    if (videoRef.current && canvasRef.current) {
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      
+      const context = canvas.getContext('2d');
+      if (context) {
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageDataUrl = canvas.toDataURL('image/jpeg');
+        setSelectedImage(imageDataUrl);
+        stopCamera();
+        toast.success("Photo captured successfully!");
+      }
+    }
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,6 +96,7 @@ const NutritionScanner = () => {
       reader.onload = (e) => {
         if (e.target?.result) {
           setSelectedImage(e.target.result as string);
+          toast.success("Image loaded successfully");
         }
       };
       
@@ -75,23 +120,67 @@ const NutritionScanner = () => {
     
     setIsAnalyzing(true);
     
-    // In a real implementation, we would send the image to an API for analysis
-    // For demonstration, we'll simulate an API call with a timeout
-    setTimeout(() => {
-      // Mock result
-      const mockResult: NutritionResult = {
-        foodName: "Grilled Chicken Salad",
-        calories: 320,
-        protein: 28,
-        carbs: 12,
-        fat: 18,
-        servingSize: "1 bowl (250g)"
-      };
+    try {
+      // In a production app, you would send the image to a real API
+      // For demo purposes, we'll use a more sophisticated mock
+      // that simulates an actual API call with different results based on image
       
-      setNutritionResult(mockResult);
-      setIsAnalyzing(false);
+      // Create a hash from the image string to simulate different foods
+      let hash = 0;
+      for (let i = 0; i < selectedImage.length; i++) {
+        hash = ((hash << 5) - hash) + selectedImage.charCodeAt(i);
+        hash = hash & hash; // Convert to 32bit integer
+      }
+      
+      // Wait for what would be the API processing time
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      
+      // Use the hash to determine which mock result to show
+      const foods = [
+        {
+          foodName: "Grilled Chicken Salad",
+          calories: 320,
+          protein: 28,
+          carbs: 12,
+          fat: 18,
+          servingSize: "1 bowl (250g)"
+        },
+        {
+          foodName: "Avocado Toast",
+          calories: 380,
+          protein: 10,
+          carbs: 38,
+          fat: 22,
+          servingSize: "1 slice (180g)"
+        },
+        {
+          foodName: "Protein Smoothie",
+          calories: 290,
+          protein: 24,
+          carbs: 30,
+          fat: 8,
+          servingSize: "1 cup (300ml)"
+        },
+        {
+          foodName: "Salmon with Vegetables",
+          calories: 430,
+          protein: 32,
+          carbs: 15,
+          fat: 25,
+          servingSize: "1 portion (280g)"
+        }
+      ];
+      
+      const index = Math.abs(hash) % foods.length;
+      setNutritionResult(foods[index]);
+      
       toast.success("Food analyzed successfully!");
-    }, 3000);
+    } catch (error) {
+      console.error("Error analyzing image:", error);
+      toast.error("Error analyzing image. Please try again.");
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const saveNutritionData = () => {
@@ -107,6 +196,15 @@ const NutritionScanner = () => {
     toast.info("Edit functionality would open here");
   };
 
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    if (value === "camera") {
+      if (!cameraActive) startCamera();
+    } else {
+      stopCamera();
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -116,7 +214,7 @@ const NutritionScanner = () => {
     >
       <Header title="Nutrition Scanner" subtitle="AI-Powered" />
       
-      <Tabs defaultValue="camera" className="w-full mb-6">
+      <Tabs defaultValue="camera" className="w-full mb-6" onValueChange={handleTabChange}>
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="camera">
             <div className="flex items-center gap-2">
@@ -134,15 +232,38 @@ const NutritionScanner = () => {
         
         <TabsContent value="camera" className="py-4">
           <Card className="p-4">
-            <div className="text-center">
-              <p className="text-sm text-muted-foreground mb-4">
-                Take a photo of your food to analyze its nutritional content
-              </p>
-              <Button onClick={handleCapture} className="w-full">
-                <Camera className="mr-2" />
-                Open Camera
-              </Button>
-            </div>
+            {!selectedImage && (
+              <div className="relative w-full">
+                {cameraActive ? (
+                  <div className="relative">
+                    <video 
+                      ref={videoRef}
+                      autoPlay
+                      playsInline
+                      className="w-full h-60 object-cover rounded-lg"
+                    />
+                    <Button 
+                      onClick={captureImage} 
+                      className="absolute bottom-4 left-1/2 transform -translate-x-1/2"
+                    >
+                      <Camera className="mr-2" />
+                      Take Photo
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="text-center">
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Take a photo of your food to analyze its nutritional content
+                    </p>
+                    <Button onClick={startCamera} className="w-full">
+                      <Camera className="mr-2" />
+                      Open Camera
+                    </Button>
+                  </div>
+                )}
+                <canvas ref={canvasRef} className="hidden" />
+              </div>
+            )}
           </Card>
         </TabsContent>
         
